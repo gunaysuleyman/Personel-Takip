@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Form</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>Customer Form</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <!-- <div>
+            <label for="id_il">İl:</label>
+            <select name="il" id="id_il">
+                <option value="">---------</option>
+                {% for il in il_list %}
+                    <option value="{{ il.id }}">{{ il.ad }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="id_ilce">İlçe:</label>
+            <select name="ilce" id="id_ilce">
+                <option value="">---------</option>
+            </select>
+        </div> -->
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var ilSelect = document.getElementById('id_il');
+            var ilceSelect = document.getElementById('id_ilce');
+
+            ilSelect.addEventListener('change', function() {
+                var ilId = this.value;
+                ilceSelect.innerHTML = '';  // Önceki ilçe seçeneklerini temizle
+
+                if (ilId) {
+                    axios.get(`/get_ilceler/?il_id=${ilId}`)
+                    .then(response => {
+                        response.data.forEach(ilce => {
+                            var option = document.createElement('option');
+                            option.textContent = ilce.ad;
+                            option.value = ilce.id;
+                            ilceSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching ilceler:', error);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
