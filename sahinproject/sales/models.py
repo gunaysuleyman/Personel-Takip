@@ -73,7 +73,6 @@ class Product(models.Model):
         verbose_name_plural = _("Ürünler")
 
 class ProductBrand(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name=_("Ürün"))
     brand_name = models.CharField(max_length=100, verbose_name=_("Marka Adı"))
 
     def __str__(self):
@@ -91,3 +90,27 @@ class Conversation(models.Model):
     class Meta:
         verbose_name = _("Görüşme")
         verbose_name_plural = _("Görüşmeler")
+
+class Visit(models.Model):
+    sales_representative = models.ForeignKey(SalesRepresentative, on_delete=models.CASCADE, verbose_name=_("Satış Temsilcisi"))
+    date = models.DateField(verbose_name=_("Tarih"))
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name=_("Müşteri"))
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True, verbose_name=_("Ürün"))
+    product_brand = models.ForeignKey(ProductBrand, on_delete=models.CASCADE, null=True, blank=True, verbose_name=_("Ürün Markası"))
+    notes = models.TextField(null=True, blank=True, verbose_name=_("Notlar"))
+    
+    @property
+    def customer_il(self):
+        return self.customer.il.ad if self.customer.il else None
+
+    @property
+    def customer_ilce(self):
+        return self.customer.ilce.ad if self.customer.ilce else None
+    
+    def __str__(self):
+        return self.customer.short_name
+
+    class Meta:
+        verbose_name = _("Randevu")
+        verbose_name_plural = _("Randevular")
+

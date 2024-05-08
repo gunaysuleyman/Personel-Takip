@@ -58,7 +58,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('brand_name', models.CharField(max_length=100, verbose_name='Marka Adı')),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='sales.product', verbose_name='Ürün')),
+                
             ],
             options={
                 'verbose_name': 'Ürün Markası',
