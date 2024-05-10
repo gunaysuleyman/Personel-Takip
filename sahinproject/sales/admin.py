@@ -13,7 +13,7 @@ class IlceAdmin(admin.ModelAdmin):
     search_fields = ['ad']
 
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ['short_name', 'company_name', 'customer_type', 'contact_person', 'il', 'ilce']
+    list_display = ['id','short_name', 'company_name', 'customer_type', 'contact_person', 'il', 'ilce']
     search_fields = ['short_name', 'company_name', 'customer_type', 'contact_person']
     list_filter = ['il', 'ilce']
 
@@ -49,17 +49,17 @@ class VisitAdminForm(forms.ModelForm):
         model = Visit
         fields = '__all__'
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        instance = kwargs.get('instance')
-        if instance and instance.customer:
-            self.fields['customer'].initial = instance.customer.il.ad if instance.customer.il else None
-            self.fields['customer_ilce'].initial = instance.customer.ilce.ad if instance.customer.ilce else None
-        else:
-            self.fields['customer'].initial = None
-            #self.fields['customer_ilce'].initial = None
-        self.fields['customer'].widget.attrs['readonly'] = True
-        self.fields['customer'].widget.attrs['readonly'] = True
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     instance = kwargs.get('instance')
+    #     if instance and instance.customer:
+    #         self.fields['customer'].initial = instance.customer.il.ad if instance.customer.il else None
+    #         self.fields['customer_ilce'].initial = instance.customer.ilce.ad if instance.customer.ilce else None
+    #     else:
+    #         self.fields['customer'].initial = None
+    #         #self.fields['customer_ilce'].initial = None
+    #     self.fields['customer'].widget.attrs['readonly'] = True
+    #     self.fields['customer'].widget.attrs['readonly'] = True
 
 
 class VisitAdmin(admin.ModelAdmin):

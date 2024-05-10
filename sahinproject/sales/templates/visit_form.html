@@ -1,12 +1,16 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visit Form</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
 </head>
+
 <body>
-    
+
     <div style="position: absolute; top: 10px; right: 10px;">
         <p>Welcome, {{ user.username }}</p>
         <form action="{% url 'logout' %}" method="post">
@@ -16,10 +20,45 @@
     </div>
 
     <h1>Ziyaret Formu</h1>
-    <form method="post">
+    <form id="visit-form" method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save</button>
+        <label for="id_date">Tarih:</label><br>
+        {{ form.date }}<br>
+        <label for="id_sales_representative">Satış Temsilcisi:</label><br>
+        {{ form.sales_representative }}<br>
+        <label for="id_customer">Müşteri:</label><br>
+        {{ form.customer }}<br>
+        <label for="id_il">İl:</label><br>
+        {{ form.il }}<br>
+        <label for="id_ilce">İlçe:</label><br>
+        {{ form.ilce }}<br>
+        <label for="id_product">Ürün:</label><br>
+        {{ form.product }}<br>
+        <label for="id_product_brand">Ürün Markası:</label><br>
+        {{ form.product_brand }}<br>
+        <label for="id_notes">Notlar:</label><br>
+        {{ form.notes }}<br>
+        <button type="submit">Gönder</button>
     </form>
+
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'js/customer_city.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#id_customer').change(function () {
+                var customerId = $(this).val();
+                $.ajax({
+                    url: '/get_customer_info/' + customerId + '/',
+                    dataType: 'json',
+                    success: function (data) {
+                        $('#id_il').val(data.il);
+                        $('#id_ilce').val(data.ilce);
+                    }
+                });
+            });
+        });
+    </script>
+
 </body>
+
 </html>
