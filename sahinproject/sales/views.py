@@ -14,19 +14,19 @@ def login_view(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('visit_form')  # Kullanıcı başarılı bir şekilde giriş yaptıktan sonra bilgileri dolduracağı sayfaya yönlendir
+            return redirect('visit_form')  
     return render(request, 'login.html')
 
 def logout_view(request):
     logout(request)
     return redirect('login')
 
-@login_required  # Kullanıcı giriş yapmadan bilgi dolduramaz
+@login_required 
 def customer_form(request):
     form = CustomerForm(request.POST or None)
     if form.is_valid():
         form.save()
-        return redirect('success_page')  # Bilgileri başarıyla doldurduktan sonra yönlendirilecek sayfa
+        return redirect('success_page')  
     return render(request, 'customer_form.html', {'form': form})
 
 # @login_required
