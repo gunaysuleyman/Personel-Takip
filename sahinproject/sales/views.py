@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -29,12 +30,25 @@ def customer_form(request):
         return redirect('success_page')  
     return render(request, 'customer_form.html', {'form': form})
 
-# @login_required
-# def add_costumer_popup(request):
-#     form = CustomerForm(request.POST or None)
-#     if form.is_valid():
-#         form.save()
-#         return JsonResponse({'success': True})
+@login_required
+def add_customer_popup(request):
+    if request.method == 'POST':
+        form = CustomerForm(request.POST)
+        if form.is_valid():
+            customer = form.save()
+
+            # Satış temsilcisini bul
+            user_id = request.POST.get('user_id')
+            sales_representative = User.objects.get(id=user_id).salesrepresentative
+
+            # Müşteriyi satış temsilcisine ata
+            sales_representative.assigned_customers.add(customer)
+
+            return JsonResponse({'success': True})
+    else:
+        form = CustomerForm()
+    return render(request, 'add_customer_popup.html', {'form': form})
+
 
 def get_ilceler(request):
     il_id = request.GET.get('il_id')

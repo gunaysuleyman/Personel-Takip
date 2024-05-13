@@ -8,7 +8,8 @@ urlpatterns = [
     path('get_ilceler/', views.get_ilceler, name='get_ilceler'),
     path('ziyaret-form/', views.visit_form, name='visit_form'),
     path('logout/', views.logout_view, name='logout'),
-     path('get_customer_info/<int:customer_id>/', views.get_customer_info, name='get_customer_info'),
+    path('get_customer_info/<int:customer_id>/', views.get_customer_info, name='get_customer_info'),
+    path('add-customer-popup/', views.add_customer_popup, name='add_customer_popup'),
 
     # Diğer URL'ler buraya eklenebilir
 ]

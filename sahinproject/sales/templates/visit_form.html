@@ -27,7 +27,7 @@
         <label for="id_sales_representative">Satış Temsilcisi:</label><br>
         {{ form.sales_representative }}<br>
         <label for="id_customer">Müşteri:</label><br>
-        {{ form.customer }}<br>
+        {{ form.customer }} <a href="{% url 'add_customer_popup' %}" onclick="window.open(this.href, 'Add Customer', 'width=600,height=400'); return false;">Müşteri Ekle</a><br>
         <label for="id_il">İl:</label><br>
         {{ form.il }}<br>
         <label for="id_ilce">İlçe:</label><br>

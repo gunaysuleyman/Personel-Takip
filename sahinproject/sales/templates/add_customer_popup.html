@@ -1,0 +1,55 @@
+{% load static %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<form method="post" id="add-customer-form">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Müşteri Ekle</button>
+</form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var ilSelect = document.getElementById('id_il');
+        var ilceSelect = document.getElementById('id_ilce');
+
+        ilSelect.addEventListener('change', function() {
+            var ilId = this.value;
+            ilceSelect.innerHTML = '';  // Önceki ilçe seçeneklerini temizle
+
+            if (ilId) {
+                axios.get(`/get_ilceler/?il_id=${ilId}`)
+                    .then(response => {
+                        response.data.forEach(ilce => {
+                            var option = document.createElement('option');
+                            option.textContent = ilce.ad;
+                            option.value = ilce.id;
+                            ilceSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error fetching ilceler:', error);
+                    });
+            }
+        });
+
+        // Müşteri ekleme formunu sunucuya AJAX ile gönder
+        $('#add-customer-form').submit(function(event) {
+            event.preventDefault();  // sayfanın yeniden yüklenmesini engelle
+            var formData = $(this).serialize() + '&user_id={{ request.user.id }}';  // Giriş yapan kullanıcının kimliğini ekleyin
+            $.ajax({
+                type: 'POST',
+                url: '{% url "add_customer_popup" %}',
+                data: formData,
+                success: function(response) {
+                    // Başarılı bir şekilde eklendiğinde popup penceresini kapat
+                    window.opener.location.reload();  // ana sayfayı yenile
+                    window.close();  // popup penceresini kapat
+                },
+                error: function(xhr, status, error) {
+                    console.error('Müşteri ekleme hatası:', error);
+                }
+            });
+        });
+    });
+</script>

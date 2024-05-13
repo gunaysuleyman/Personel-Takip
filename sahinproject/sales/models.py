@@ -25,7 +25,7 @@ class Ilce(models.Model):
         verbose_name_plural = _("İlçeler")
 
 class Customer(models.Model):
-    short_name = models.CharField(max_length=100, verbose_name=_("Müşteri Kısa Adı"))
+    short_name = models.CharField(max_length=100, unique=True, verbose_name=_("Müşteri Kısa Adı"))
     company_name = models.CharField(max_length=100, verbose_name=_("Müşteri Şirket Adı"))
     customer_type = models.CharField(max_length=100, verbose_name=_("Müşteri Tipi"))
     contact_person = models.CharField(max_length=100, verbose_name=_("Görüşülen Kişi"))
