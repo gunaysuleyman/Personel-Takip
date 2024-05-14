@@ -7,6 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visit Form</title>
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'fontawesome/css/all.min.css' %}" rel="stylesheet">
+
+    
+
 </head>
 
 <body>
@@ -20,12 +24,19 @@
     </div>
 
     <h1>Ziyaret Formu</h1>
+    <p>Sayın {{ sales_representative_full_name }}, Şahin Portala hoş geldiniz.</p>
     <form id="visit-form" method="post">
         {% csrf_token %}
-        <label for="id_date">Tarih:</label><br>
-        {{ form.date }}<br>
-        <label for="id_sales_representative">Satış Temsilcisi:</label><br>
         {{ form.sales_representative }}<br>
+        <label for="id_sales_representative_display">Satış Temsilcisi:</label><br>
+        <input type="text" id="id_sales_representative_display" value="{{ sales_representative_full_name }}" readonly><br>
+        <label for="id_date">Tarih:</label><br>
+        <div >
+            {{ form.date }}
+            <span class="input-group-addon" id="calendar-icon">
+                <i class="fa-solid fa-calendar-days"></i>    
+            </span>
+        </div>
         <label for="id_customer">Müşteri:</label><br>
         {{ form.customer }} <a href="{% url 'add_customer_popup' %}" onclick="window.open(this.href, 'Add Customer', 'width=600,height=400'); return false;">Müşteri Ekle</a><br>
         <label for="id_il">İl:</label><br>
@@ -43,6 +54,7 @@
 
     <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
     <script src="{% static 'js/customer_city.js' %}"></script>
+    <script src="{% static 'js/calender.js' %}"></script>
     <script>
         $(document).ready(function () {
             $('#id_customer').change(function () {
@@ -57,7 +69,17 @@
                 });
             });
         });
+
+
     </script>
+    <!-- <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var salesRepresentativeInput = document.getElementById('id_sales_representative');
+            console.log(salesRepresentativeInput);
+            salesRepresentativeInput.value = "{{ request.user.salesrepresentative }}";
+            salesRepresentativeInput.setAttribute('readonly', 'readonly');
+        });
+    </script> -->
 
 </body>
 

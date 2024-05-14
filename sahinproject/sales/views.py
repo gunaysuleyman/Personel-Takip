@@ -56,7 +56,6 @@ def get_ilceler(request):
     return JsonResponse(list(ilceler), safe=False)
 
 
-
 def get_customer_info(request, customer_id):
     customer = get_object_or_404(Customer, id=customer_id)
     il_ad = customer.il.ad if customer.il else None
@@ -65,11 +64,17 @@ def get_customer_info(request, customer_id):
 
 @login_required
 def visit_form(request):
-    form = VisitForm.for_user(request.user, instance=Visit() )
+    sales_rep = SalesRepresentative.objects.get(user__username=request.user)
+    print(sales_rep)    
     if request.method == 'POST':
-        form = VisitForm.for_user(request.user, request.POST, instance=Visit())
+        form = VisitForm.for_user(request.user, request.POST)
         if form.is_valid():
-            # Ziyaret oluşturma işlemi
             form.save()
-            # Başka bir şey yapabilirsiniz, örneğin bir yönlendirme
-    return render(request, 'visit_form.html', {'form': form})
+            return redirect('success_url')  # Başarılı kayıttan sonra yönlendirilecek URL
+        else:
+            return render(request, 'close_popup.html', {'form': form})
+    else:
+        form = VisitForm.for_user(request.user)
+        form.fields['sales_representative'].initial = sales_rep 
+
+    return render(request, 'visit_form.html', {'form': form, 'sales_representative_full_name': sales_rep.full_name})
