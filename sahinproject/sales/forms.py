@@ -12,9 +12,11 @@ class CustomerForm(forms.ModelForm):
 class VisitForm(forms.ModelForm):
     il = forms.CharField(label='İl', required=False, widget=forms.TextInput(attrs={'readonly': 'readonly'}))
     ilce = forms.CharField(label='İlçe', required=False, widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+    date = forms.DateField(label='Tarih', widget=forms.DateInput(format='%d.%m.%y', attrs={'type': 'text', 'placeholder': 'GG.AA.YYYY'}))
+    view_all_customers = forms.BooleanField(label='Tüm Müşteriler', required=False)
     class Meta:
         model = Visit
-        fields = ['sales_representative', 'date', 'customer', 'il', 'ilce', 'product', 'product_brand', 'notes']
+        fields = ['sales_representative', 'date', 'customer', 'view_all_customers', 'il', 'ilce', 'product', 'product_brand', 'notes']
 
     def __init__(self, user, *args, **kwargs):
         super(VisitForm, self).__init__(*args, **kwargs)

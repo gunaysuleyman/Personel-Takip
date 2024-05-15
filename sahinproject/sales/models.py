@@ -93,7 +93,7 @@ class Conversation(models.Model):
 
 class Visit(models.Model):
     sales_representative = models.ForeignKey(SalesRepresentative, on_delete=models.CASCADE, verbose_name=_("Satış Temsilcisi"))
-    date = models.DateField(verbose_name=_("Tarih"))
+    date = models.DateField(verbose_name=_("Tarih"), format="%d.%m.%Y")
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name=_("Müşteri"))
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True, verbose_name=_("Ürün"))
     product_brand = models.ForeignKey(ProductBrand, on_delete=models.CASCADE, null=True, blank=True, verbose_name=_("Ürün Markası"))

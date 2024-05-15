@@ -11,21 +11,6 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <!-- <div>
-            <label for="id_il">İl:</label>
-            <select name="il" id="id_il">
-                <option value="">---------</option>
-                {% for il in il_list %}
-                    <option value="{{ il.id }}">{{ il.ad }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div>
-            <label for="id_ilce">İlçe:</label>
-            <select name="ilce" id="id_ilce">
-                <option value="">---------</option>
-            </select>
-        </div> -->
         <button type="submit">Submit</button>
     </form>
 

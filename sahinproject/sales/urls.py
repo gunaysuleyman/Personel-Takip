@@ -10,6 +10,7 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('get_customer_info/<int:customer_id>/', views.get_customer_info, name='get_customer_info'),
     path('add-customer-popup/', views.add_customer_popup, name='add_customer_popup'),
+    path('update-customer-list/', views.update_customer_list, name='update_customer_list'),
 
     # Diğer URL'ler buraya eklenebilir
 ]

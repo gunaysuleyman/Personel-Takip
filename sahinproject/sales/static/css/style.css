@@ -1,0 +1,3 @@
+label[for="id_customer"]::after {
+    content: none; /* ":" işaretini gizle */
+}

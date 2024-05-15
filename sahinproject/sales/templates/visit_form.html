@@ -8,7 +8,7 @@
     <title>Visit Form</title>
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'fontawesome/css/all.min.css' %}" rel="stylesheet">
-
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
     
 
 </head>
@@ -38,7 +38,8 @@
             </span>
         </div>
         <label for="id_customer">Müşteri:</label><br>
-        {{ form.customer }} <a href="{% url 'add_customer_popup' %}" onclick="window.open(this.href, 'Add Customer', 'width=600,height=400'); return false;">Müşteri Ekle</a><br>
+        {{ form.customer }} {{ form.view_all_customers }} <label for="id_view_all_customers">Tüm Müşterileri Görüntüle</label> 
+        <br><a href="{% url 'add_customer_popup' %}" onclick="window.open(this.href, 'Add Customer', 'width=600,height=400'); return false;">Müşteri Ekle</a><br>
         <label for="id_il">İl:</label><br>
         {{ form.il }}<br>
         <label for="id_ilce">İlçe:</label><br>
@@ -53,33 +54,52 @@
     </form>
 
     <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
-    <script src="{% static 'js/customer_city.js' %}"></script>
-    <script src="{% static 'js/calender.js' %}"></script>
+    <script src="{% static 'js/date_format.js' %}"></script>
     <script>
-        $(document).ready(function () {
-            $('#id_customer').change(function () {
+        $(function() {
+            $('#id_customer').on('input', function() {
                 var customerId = $(this).val();
+                console.log("visit_form:CustomerId:", customerId);
+
+                if (!customerId) {
+                    return; ır
+                }
+        
                 $.ajax({
                     url: '/get_customer_info/' + customerId + '/',
                     dataType: 'json',
-                    success: function (data) {
+                    success: function(data) {
+                        
                         $('#id_il').val(data.il);
                         $('#id_ilce').val(data.ilce);
+                        console.log(data.il, data.ilce);
+                        console.log("---------------")
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error:', status, error);
+                   
                     }
                 });
             });
         });
 
-
     </script>
-    <!-- <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var salesRepresentativeInput = document.getElementById('id_sales_representative');
-            console.log(salesRepresentativeInput);
-            salesRepresentativeInput.value = "{{ request.user.salesrepresentative }}";
-            salesRepresentativeInput.setAttribute('readonly', 'readonly');
+    <script>
+        $(document).ready(function() {
+            $('#id_view_all_customers').change(function() {
+                var viewAll = $(this).is(':checked');
+                $.ajax({
+                    url: '{% url "update_customer_list" %}', 
+                    data: {
+                        'view_all': viewAll
+                    },
+                    success: function(data) {
+                        $('#id_customer').html(data.html);
+                    }
+                });
+            });
         });
-    </script> -->
+    </script>
 
 </body>
 

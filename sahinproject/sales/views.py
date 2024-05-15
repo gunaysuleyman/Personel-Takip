@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import *
 from django.http import JsonResponse
 from .models import *
+from django.template.loader import render_to_string
 
 
 
@@ -72,9 +73,23 @@ def visit_form(request):
             form.save()
             return redirect('success_url')  # Başarılı kayıttan sonra yönlendirilecek URL
         else:
+            print(form.errors)
             return render(request, 'close_popup.html', {'form': form})
     else:
         form = VisitForm.for_user(request.user)
         form.fields['sales_representative'].initial = sales_rep 
 
     return render(request, 'visit_form.html', {'form': form, 'sales_representative_full_name': sales_rep.full_name})
+
+@login_required
+def update_customer_list(request):
+    user = request.user
+    view_all = request.GET.get('view_all') == 'true'
+    if view_all:
+        customers = Customer.objects.all()
+    else:
+        customers = Customer.objects.filter(salesrepresentative__user=user)
+    
+    html = render_to_string('customer_options_partial.html', {'customers': customers})
+    print(html)
+    return JsonResponse({'html': html})
